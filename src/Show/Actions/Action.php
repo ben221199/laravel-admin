@@ -17,7 +17,7 @@ class Action extends BaseAction
      *
      * @return $this
      */
-    public function setModel(Model $model)
+    public function setModel($model)
     {
         $this->model = $model;
 

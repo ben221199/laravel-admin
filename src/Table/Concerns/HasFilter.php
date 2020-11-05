@@ -34,7 +34,7 @@ trait HasFilter
      */
     public function disableFilter(bool $disable = true)
     {
-        $this->tools->disableFilterButton($disable);
+        //$this->tools->disableFilterButton($disable);
 
         return $this->option('show_filter', !$disable);
     }

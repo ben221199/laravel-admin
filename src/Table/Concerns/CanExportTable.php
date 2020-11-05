@@ -74,9 +74,9 @@ trait CanExportTable
     {
         $input = array_merge(request()->all(), Exporter::formatExportQuery($scope, $args));
 
-        if ($constraints = $this->model()->getConstraints()) {
-            $input = array_merge($input, $constraints);
-        }
+        //if ($constraints = $this->model()->getConstraints()) {
+        //    $input = array_merge($input, $constraints);
+        //}
 
         return $this->resource().'?'.http_build_query($input);
     }

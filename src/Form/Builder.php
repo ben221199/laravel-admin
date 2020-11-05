@@ -209,7 +209,8 @@ class Builder
      */
     public function getModel()
     {
-        return $this->form->model();
+		return $this->form->crud()->getItem(0)->getValue();
+        //return $this->form->model();
     }
 
     /**
@@ -592,7 +593,7 @@ class Builder
      */
     public function render(): string
     {
-        $this->removeReservedFields();
+        //$this->removeReservedFields();
 
         return Admin::view($this->view, [
             'form'   => $this,

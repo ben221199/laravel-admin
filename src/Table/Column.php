@@ -148,7 +148,7 @@ class Column
     {
         $this->table = $table;
 
-        $this->setModel($table->model()->eloquent());
+        //$this->setModel($table->model()->eloquent());
     }
 
     /**
@@ -546,10 +546,10 @@ class Column
                 $this->useDefinedColumn();
             }
 
-            if ($this->hasDisplayCallbacks()) {
-                $value = $this->callDisplayCallbacks($this->original, $key);
-                Arr::set($row, $this->name, $value);
-            }
+            //if ($this->hasDisplayCallbacks()) {
+            //    $value = $this->callDisplayCallbacks($this->original, $key);
+            //    Arr::set($row, $this->name, $value);
+            //}
         }
 
         return $data;

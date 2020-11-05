@@ -77,7 +77,7 @@ class AdminController extends Controller
         return $content
             ->title($this->title())
             ->description($this->description['show'] ?? trans('admin.show'))
-            ->body($this->detail($id));
+            ->body($this->detail($id)->view($id));
     }
 
     /**

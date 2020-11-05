@@ -2,6 +2,7 @@
 
 namespace Encore\Admin;
 
+use Encore\Admin\Crud\CrudInterface;
 use Encore\Admin\Show\Divider;
 use Encore\Admin\Show\Field;
 use Encore\Admin\Show\Panel;
@@ -24,6 +25,13 @@ use Illuminate\Support\Str;
 class Show implements Renderable
 {
     use ShouldSnakeAttributes;
+
+	/**
+	 * The CRUD for the view.
+	 *
+	 * @var CrudInterface
+	 */
+	protected $crud;
 
     /**
      * The Eloquent model to show.
@@ -77,15 +85,16 @@ class Show implements Renderable
      */
     protected static $initCallback;
 
-    /**
-     * Show constructor.
-     *
-     * @param Model $model
-     * @param mixed $builder
-     */
-    public function __construct($model, $builder = null)
+	/**
+	 * Show constructor.
+	 *
+	 * @param CrudInterface $crud
+	 * @param mixed $builder
+	 */
+    public function __construct(CrudInterface $crud, $builder = null)
     {
-        $this->model = $model;
+    	$this->crud = $crud;
+        //$this->model = $model;
         $this->builder = $builder;
 
         $this->initPanel();
@@ -502,6 +511,12 @@ class Show implements Renderable
 
         return false;
     }
+
+    public function view($id){
+    	$this->model = $this->crud->getItem($id)->getValue();
+
+    	return $this;
+	}
 
     /**
      * Render the show panels.

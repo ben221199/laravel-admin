@@ -3,6 +3,7 @@
 namespace Encore\Admin;
 
 use Closure;
+use Encore\Admin\Crud\CrudInterface;
 use Encore\Admin\Exception\Handler;
 use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Concerns;
@@ -37,6 +38,13 @@ class Form implements Renderable
      * Remove flag in `has many` form.
      */
     const REMOVE_FLAG_NAME = '_remove_';
+
+	/**
+	 * The CRUD for the form.
+	 *
+	 * @var CrudInterface
+	 */
+	protected $crud;
 
     /**
      * Eloquent model of the form.
@@ -110,20 +118,21 @@ class Form implements Renderable
      */
     protected $insertPoint;
 
-    /**
-     * Create a new form instance.
-     *
-     * @param $model
-     */
-    public function __construct($model)
+	/**
+	 * Create a new form instance.
+	 *
+	 * @param CrudInterface $crud
+	 */
+    public function __construct(CrudInterface $crud)
     {
-        $this->model = $model;
+    	$this->crud = $crud;
+        //$this->model = $model;
 
         $this->builder = new Builder($this);
 
         $this->initLayout();
 
-        $this->isSoftDeletes = in_array(SoftDeletes::class, class_uses_deep($this->model), true);
+        //$this->isSoftDeletes = in_array(SoftDeletes::class, class_uses_deep($this->model), true);
 
         $this->callInitCallbacks();
     }
@@ -150,11 +159,19 @@ class Form implements Renderable
         return $this;
     }
 
+	/**
+	 * @return CrudInterface
+	 */
+	public function crud(): CrudInterface
+	{
+		return $this->crud;
+	}
+
     /**
      * @return Model
      */
-    public function model(): Model
-    {
+    public function model()
+    {return $this->crud->getItem(0)->getValue();
         return $this->model;
     }
 
@@ -183,8 +200,8 @@ class Form implements Renderable
      */
     public function edit($id): self
     {
-        $this->builder->setMode(Builder::MODE_EDIT);
-        $this->builder->setResourceId($id);
+        //$this->builder->setMode(Builder::MODE_EDIT);
+        //$this->builder->setResourceId($id);
 
         $this->setFieldValue($id);
 
@@ -754,24 +771,26 @@ class Form implements Renderable
      */
     protected function setFieldValue($id)
     {
-        $relations = $this->getRelations();
+//        $relations = $this->getRelations();
+//
+//        $builder = $this->model();
+//
+//        if ($this->isSoftDeletes) {
+//            $builder = $builder->withTrashed();
+//        }
 
-        $builder = $this->model();
-
-        if ($this->isSoftDeletes) {
-            $builder = $builder->withTrashed();
-        }
-
-        $this->model = $builder->with($relations)->findOrFail($id);
+//        $this->model = $builder->with($relations)->findOrFail($id);
+		$model = $this->crud->getItem($id)->getValue();
 
         $this->callEditing();
 
-        $data = $this->model->toArray();
+        $data = $model->toArray();
 
         $this->fields()->each(function (Field $field) use ($data) {
             if (!in_array($field->column(), $this->ignored, true)) {
                 $field->fill($data);
             }
+			//dd($data,$field->value());
         });
     }
 

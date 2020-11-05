@@ -43,7 +43,8 @@ class Delete extends Action
     {
         return [
             'model' => get_class($this->model),
-            'key'   => $this->model->getKey(),
+            //'key'   => $this->model->getKey(),
+			'key'   => $this->model->id,
             'path'  => $this->path,
         ];
     }
@@ -58,7 +59,8 @@ class Delete extends Action
      */
     public function getHandleUrl()
     {
-        return $this->path.'/'.$this->model->getKey();
+        //return $this->path.'/'.$this->model->getKey();
+		return $this->path.'/'.$this->model->id;
     }
 
     public function html()

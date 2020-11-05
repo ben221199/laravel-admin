@@ -3,6 +3,7 @@
 namespace Encore\Admin;
 
 use Closure;
+use Encore\Admin\Crud\CrudInterface;
 use Encore\Admin\Exception\Handler;
 use Encore\Admin\Table\Column;
 use Encore\Admin\Table\Concerns;
@@ -38,6 +39,13 @@ class Table
         Macroable {
             __call as macroCall;
         }
+
+	/**
+	 * The CRUD for the table.
+	 *
+	 * @var CrudInterface
+	 */
+	protected $crud;
 
     /**
      * The table data model instance.
@@ -162,15 +170,16 @@ class Table
      */
     public $modalForm = false;
 
-    /**
-     * Create a new table instance.
-     *
-     * @param Eloquent $model
-     */
-    public function __construct(Eloquent $model)
+	/**
+	 * Create a new table instance.
+	 *
+	 * @param CrudInterface $crud
+	 */
+    public function __construct(CrudInterface $crud)
     {
-        $this->model = new Model($model, $this);
-        $this->keyName = $model->getKeyName();
+    	$this->crud = $crud;
+        //$this->model = new Model($model, $this);
+        //$this->keyName = $model->getKeyName();
 
         $this->initialize();
 
@@ -187,7 +196,7 @@ class Table
         $this->columns = Collection::make();
         $this->rows = Collection::make();
 
-        $this->initTools()->initFilter();
+        //$this->initTools()->initFilter();
     }
 
     /**
@@ -439,7 +448,7 @@ class Table
      */
     public function disablePagination(bool $disable = true)
     {
-        $this->model->usePaginate(!$disable);
+        //$this->model->usePaginate(!$disable);
 
         return $this->option('show_pagination', !$disable);
     }
@@ -566,13 +575,16 @@ HTML;
             return;
         }
 
-        $this->applyQuery();
-
-        $collection = $this->applyFilter(false);
+//        $this->applyQuery();
+//
+//        $collection = $this->applyFilter(false);
 
         $this->addDefaultColumns();
 
-        Column::setOriginalTableModels($collection);
+        $collection = $data = $this->crud->getItems()->getValue();
+
+
+//        Column::setOriginalTableModels($collection);
 
         $data = $collection->toArray();
 
@@ -597,7 +609,8 @@ HTML;
     protected function buildRows(array $data, Collection $collection)
     {
         $this->rows = collect($data)->map(function ($model, $number) use ($collection) {
-            return new Row($number, $model, $collection->get($number)->getKey());
+            //return new Row($number, $model, $collection->get($number)->getKey());
+			return new Row($number, $model, $collection->get($number)->id);
         });
 
         if ($this->rowsCallback) {
@@ -630,9 +643,9 @@ HTML;
     {
         $queryString = '';
 
-        if ($constraints = $this->model()->getConstraints()) {
-            $queryString = http_build_query($constraints);
-        }
+        //if ($constraints = $this->model()->getConstraints()) {
+        //    $queryString = http_build_query($constraints);
+        //}
 
         return sprintf(
             '%s/create%s',
@@ -703,9 +716,9 @@ HTML;
      */
     protected function handleGetMutatorColumn($method, $label)
     {
-        if ($this->model()->eloquent()->hasGetMutator($method)) {
-            return $this->addColumn($method, $label);
-        }
+        //if ($this->model()->eloquent()->hasGetMutator($method)) {
+        //    return $this->addColumn($method, $label);
+        //}
 
         return false;
     }
@@ -720,7 +733,8 @@ HTML;
      */
     protected function handleRelationColumn($method, $label)
     {
-        $model = $this->model()->eloquent();
+        //$model = $this->model()->eloquent();
+        $model = null;
 
         if (!method_exists($model, $method)) {
             return false;
@@ -770,9 +784,9 @@ HTML;
 
         $label = $arguments[0] ?? null;
 
-        if ($this->model()->eloquent() instanceof MongodbModel) {
-            return $this->addColumn($method, $label);
-        }
+        //if ($this->model()->eloquent() instanceof MongodbModel) {
+        //    return $this->addColumn($method, $label);
+        //}
 
         if ($column = $this->handleGetMutatorColumn($method, $label)) {
             return $column;

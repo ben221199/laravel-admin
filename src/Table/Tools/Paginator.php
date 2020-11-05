@@ -27,7 +27,7 @@ class Paginator extends AbstractTool
         $this->table = $table;
         $this->perPageSelector = $perPageSelector;
 
-        $this->initPaginator();
+        //$this->initPaginator();
     }
 
     /**

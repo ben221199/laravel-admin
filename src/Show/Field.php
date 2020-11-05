@@ -485,7 +485,7 @@ HTML;
      *
      * @return $this
      */
-    public function setValue(Model $model)
+    public function setValue($model)
     {
         if ($this->relation) {
             if (!$relationValue = $model->{$this->relation}) {
