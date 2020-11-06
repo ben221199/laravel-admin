@@ -172,7 +172,7 @@ class Form implements Renderable
      */
     public function model()
     {return $this->crud->getItem(0)->getValue();
-        return $this->model;
+        //return $this->model;
     }
 
     /**

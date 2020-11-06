@@ -50,9 +50,10 @@ abstract class TableAction extends Action
      */
     protected function getModelClass()
     {
-        $model = $this->parent->model()->getOriginalModel();
-
-        return str_replace('\\', '_', get_class($model));
+    	return '';
+//        $model = $this->parent->model()->getOriginalModel();
+//
+//        return str_replace('\\', '_', get_class($model));
     }
 
     /**

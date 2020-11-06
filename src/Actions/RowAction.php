@@ -39,7 +39,8 @@ abstract class RowAction extends TableAction
      */
     protected function getKey()
     {
-        return $this->row->getKey();
+		return $this->row->id;
+        //return $this->row->getKey();
     }
 
     /**

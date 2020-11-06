@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Http\Controllers;
 
+use Encore\Admin\Crud\DatabaseCrud;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Layout\Content;
@@ -130,16 +131,16 @@ class AuthController extends Controller
     {
         $class = config('admin.database.users_model');
 
-        $form = new Form(new $class());
+        $form = new Form(new DatabaseCrud($class));
 
         $form->display('username', trans('admin.username'));
         $form->text('name', trans('admin.name'))->rules('required');
         $form->image('avatar', trans('admin.avatar'));
         $form->password('password', trans('admin.password'))->rules('confirmed|required');
-        $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
-            ->default(function ($form) {
-                return $form->model()->password;
-            });
+//        $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
+//            ->default(function ($form) {
+//                return $form->model()->password;
+//            });
 
         $form->setAction(admin_url('auth/setting'));
 

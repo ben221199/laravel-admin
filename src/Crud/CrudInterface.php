@@ -1,9 +1,7 @@
 <?php
 namespace Encore\Admin\Crud;
 
-
-interface CrudInterface
-{
+interface CrudInterface{
 
 	public function getItems(): CrudResult;		//	GET			/items
 

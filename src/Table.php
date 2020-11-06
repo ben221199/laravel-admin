@@ -583,8 +583,7 @@ HTML;
 
         $collection = $data = $this->crud->getItems()->getValue();
 
-
-//        Column::setOriginalTableModels($collection);
+        Column::setOriginalTableModels($collection);
 
         $data = $collection->toArray();
 

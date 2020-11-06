@@ -1,9 +1,7 @@
 <?php
 namespace Encore\Admin\Crud;
 
-
-class CrudResult
-{
+class CrudResult{
 
 	private $value;
 

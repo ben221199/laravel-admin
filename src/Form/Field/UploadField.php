@@ -133,7 +133,7 @@ trait UploadField
         ];
 
         if ($this->form instanceof Form) {
-            $defaults['deleteUrl'] = $this->form->resource().'/'.$this->form->model()->getKey();
+            //$defaults['deleteUrl'] = $this->form->resource().'/'.$this->form->model()->getKey();
         }
 
         $defaults = array_merge($defaults, ['fileActionSettings' => $this->fileActionSettings]);
