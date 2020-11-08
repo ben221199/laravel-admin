@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 
-class Model
+class OldModel
 {
     /**
      * Eloquent model instance of the table model.

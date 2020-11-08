@@ -22,7 +22,7 @@ trait HasFilter
      */
     protected function initFilter()
     {
-        $this->filter = new Filter($this->model());
+        $this->filter = new Filter(null);//$this->model()
 
         return $this;
     }

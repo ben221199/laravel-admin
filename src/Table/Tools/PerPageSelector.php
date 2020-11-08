@@ -25,7 +25,7 @@ class PerPageSelector extends AbstractTool
     public function __construct(Table $table)
     {
         $this->table = $table;
-        $this->perPageName = $this->table->model()->getPerPageName();
+        $this->perPageName = $this->table->getPerPageName();//'id';//$this->table->model()->getPerPageName();
         $this->perPage = (int) request($this->perPageName, $this->table->perPage);
     }
 

@@ -1,8 +1,17 @@
 <?php
 namespace Encore\Admin\Crud;
 
+use Encore\Admin\Table\Filter\AbstractFilter;
+use Encore\Admin\Table\Sort;
+use Encore\Admin\Table\Tools\Paginator;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
+
 class DatabaseCrud implements CrudInterface{
 
+	/**
+	 * @var Model $model
+	 */
 	private $model;
 
 	public function __construct($model)
@@ -11,14 +20,27 @@ class DatabaseCrud implements CrudInterface{
 	}
 
 
-	public function getItems(): CrudResult
+	/**
+	 * @param AbstractFilter $filter
+	 * @param Paginator $page
+	 * @param Sort[] $sort
+	 * @return CrudResult
+	 */
+	public function getItems($filter,$page,$sort): CrudResult
 	{
-		return new CrudResult($this->model::all());
+		/**@var Builder $query*/
+		$query = $this->model::query();
+
+		//dd($sortType,$sortColumn);
+
+		$query->orderBy($sort->getColumn(),$sort->getType());
+
+		return new CrudResult($query->get());
 	}
 
 	public function getItem($id): CrudResult
 	{
-		return new CrudResult($this->model::find($id));
+		return new CrudResult($this->model::query()->find($id));
 	}
 
 	public function addItem(): CrudResult

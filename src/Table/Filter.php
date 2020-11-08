@@ -149,11 +149,11 @@ class Filter implements Renderable
      *
      * @param Model $model
      */
-    public function __construct(Model $model)
+    public function __construct($model)
     {
-        $this->model = $model;
+        //$this->model = $model;
 
-        $this->primaryKey = $this->model->eloquent()->getKeyName();
+        $this->primaryKey = 'id';//$this->model->eloquent()->getKeyName();
 
         $this->initLayout();
 
@@ -183,20 +183,20 @@ class Filter implements Renderable
         return $this;
     }
 
-    /**
-     * Get table model.
-     *
-     * @return Model
-     */
-    public function getModel()
-    {
-        $conditions = array_merge(
-            $this->conditions(),
-            $this->scopeConditions()
-        );
-
-        return $this->model->addConditions($conditions);
-    }
+//    /**
+//     * Get table model.
+//     *
+//     * @return Model
+//     */
+//    public function getModel()
+//    {
+//        $conditions = array_merge(
+//            $this->conditions(),
+//            $this->scopeConditions()
+//        );
+//
+//        return $this->model->addConditions($conditions);
+//    }
 
     /**
      * Set ID of search form.
@@ -508,17 +508,17 @@ class Filter implements Renderable
      */
     public function execute($toArray = true)
     {
-        if (method_exists($this->model->eloquent(), 'paginate')) {
-            $this->model->usePaginate(true);
-
-            return $this->model->buildData($toArray);
-        }
+//        if (method_exists($this->model->eloquent(), 'paginate')) {
+//            $this->model->usePaginate(true);
+//
+//            return $this->model->buildData($toArray);
+//        }
         $conditions = array_merge(
             $this->conditions(),
             $this->scopeConditions()
         );
-
-        return $this->model->addConditions($conditions)->buildData($toArray);
+return [];
+//        return $this->model->addConditions($conditions)->buildData($toArray);
     }
 
     /**
@@ -533,8 +533,8 @@ class Filter implements Renderable
             $this->conditions(),
             $this->scopeConditions()
         );
-
-        return $this->model->addConditions($conditions)->chunk($callback, $count);
+return false;
+//        return $this->model->addConditions($conditions)->chunk($callback, $count);
     }
 
     /**
@@ -570,9 +570,9 @@ class Filter implements Renderable
 
         $pageKey = 'page';
 
-        if ($tableName = $this->model->getTable()->getName()) {
-            $pageKey = "{$tableName}_{$pageKey}";
-        }
+//        if ($tableName = $this->model->getTable()->getName()) {
+//            $pageKey = "{$tableName}_{$pageKey}";
+//        }
 
         $columns->push($pageKey);
 

@@ -8,16 +8,14 @@ use Encore\Admin\Exception\Handler;
 use Encore\Admin\Table\Column;
 use Encore\Admin\Table\Concerns;
 use Encore\Admin\Table\Displayers;
-use Encore\Admin\Table\Model;
 use Encore\Admin\Table\Row;
+use Encore\Admin\Table\Sort;
 use Encore\Admin\Table\Tools;
 use Encore\Admin\Traits\ShouldSnakeAttributes;
-use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
-use Jenssegers\Mongodb\Eloquent\Model as MongodbModel;
 
 class Table
 {
@@ -191,12 +189,12 @@ class Table
      */
     protected function initialize()
     {
-        $this->tableID = uniqid('table-');
+        $this->tableID = uniqid('table-',true);
 
         $this->columns = Collection::make();
         $this->rows = Collection::make();
 
-        //$this->initTools()->initFilter();
+        $this->initTools()->initFilter();
     }
 
     /**
@@ -405,15 +403,16 @@ class Table
         });
     }
 
-    /**
-     * Get Table model.
-     *
-     * @return Model|\Illuminate\Database\Eloquent\Builder
-     */
-    public function model()
-    {
-        return $this->model;
-    }
+//    /**
+//     * Get Table model.
+//     *
+//     * @return Model|\Illuminate\Database\Eloquent\Builder
+//     */
+//    public function model()
+//    {
+//    	return $this->crud->getItems()->getValue()[0];
+//        //return $this->model;
+//    }
 
     /**
      * Paginate the table.
@@ -426,7 +425,7 @@ class Table
     {
         $this->perPage = $perPage;
 
-        $this->model()->setPerPage($perPage);
+//        $this->model()->setPerPage($perPage);
 
         return $this;
     }
@@ -525,7 +524,7 @@ HTML;
      */
     protected function applyColumnFilter()
     {
-        $this->columns->each->bindFilterQuery($this->model());
+        $this->columns->each->bindFilterQuery();//$this->model()
     }
 
     /**
@@ -535,22 +534,22 @@ HTML;
      */
     protected function applyColumnSearch()
     {
-        $this->columns->each->bindSearchQuery($this->model());
+//        $this->columns->each->bindSearchQuery($this->model());
     }
 
-    /**
-     * @return array|Collection|mixed
-     */
-    public function applyQuery()
-    {
-        $this->applyQuickSearch();
-
-        $this->applyColumnFilter();
-
-        $this->applyColumnSearch();
-
-        $this->applySelectorQuery();
-    }
+//    /**
+//     * @return array|Collection|mixed
+//     */
+//    public function applyQuery()
+//    {
+//        $this->applyQuickSearch();
+//
+//        $this->applyColumnFilter();
+//
+//        $this->applyColumnSearch();
+//
+//        $this->applySelectorQuery();
+//    }
 
     /**
      * Add row selector columns and action columns before and after the table.
@@ -574,16 +573,21 @@ HTML;
         if ($this->builded) {
             return;
         }
-
 //        $this->applyQuery();
 //
 //        $collection = $this->applyFilter(false);
 
         $this->addDefaultColumns();
 
-        $collection = $data = $this->crud->getItems()->getValue();
+        $filter = $this->filter->filters();
+        $page = $this->paginator();
+        $sort = [new Sort(request()->get('_sort')['column'],request()->get('_sort')['type'])];
+
+        $collection = $data = $this->crud->getItems($filter,$page,$sort)->getValue();
 
         Column::setOriginalTableModels($collection);
+
+        //dd($page);
 
         $data = $collection->toArray();
 
@@ -747,7 +751,7 @@ HTML;
             $relation instanceof Relations\BelongsTo ||
             $relation instanceof Relations\MorphOne
         ) {
-            $this->model()->with($method);
+//            $this->model()->with($method);
 
             return $this->addColumn($method, $label)->setRelation(
                 $this->shouldSnakeAttributes() ? Str::snake($method) : $method
@@ -759,7 +763,7 @@ HTML;
             || $relation instanceof Relations\MorphToMany
             || $relation instanceof Relations\HasManyThrough
         ) {
-            $this->model()->with($method);
+//            $this->model()->with($method);
 
             return $this->addColumn($this->shouldSnakeAttributes() ? Str::snake($method) : $method, $label);
         }
@@ -862,7 +866,7 @@ HTML;
      */
     public function setRelation(Relations\Relation $relation)
     {
-        $this->model()->setRelation($relation);
+//        $this->model()->setRelation($relation);
 
         return $this;
     }

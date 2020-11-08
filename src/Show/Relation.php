@@ -65,7 +65,7 @@ class Relation extends Field
      *
      * @return $this
      */
-    public function setModel(Model $model)
+    public function setModel($model)
     {
         $this->model = $model;
 

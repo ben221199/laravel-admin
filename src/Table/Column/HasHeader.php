@@ -47,7 +47,7 @@ trait HasHeader
      */
     protected function addSorter($cast = null)
     {
-        $sortName = $this->table->model()->getSortName();
+        $sortName = '_sort';//$this->table->model()->getSortName();
 
         $sorter = new Sorter($sortName, $this->getName(), $cast);
 

@@ -30,27 +30,31 @@ class UserController extends AdminController
      *
      * @return Table
      */
-    protected function table()
+    protected function table(): Table
     {
         $table = new Table($this->crud);
 
-        $table->column('id', 'ID');//->sortable();
+        $table->disablePagination();
+        $table->disableTools();
+        $table->disableFilter();
+
+        $table->column('id', 'ID')->sortable();
         $table->column('username', trans('admin.username'));
         $table->column('name', trans('admin.name'));
         $table->column('created_at', trans('admin.created_at'));
         $table->column('updated_at', trans('admin.updated_at'));
 
-        $table->actions(function (Table\Displayers\Actions $actions) {
-            if ($actions->getKey() == 1) {
+        $table->actions(function (Table\Displayers\DropdownActions $actions) {
+            if ($actions->getKey() === 1) {
                 $actions->disableDelete();
             }
         });
-
-        $table->tools(function (Table\Tools $tools) {
-            $tools->batch(function (Table\Tools\BatchActions $actions) {
-                $actions->disableDelete();
-            });
-        });
+//
+//        $table->tools(function (Table\Tools $tools) {
+//            $tools->batch(function (Table\Tools\BatchActions $actions) {
+//                $actions->disableDelete();
+//            });
+//        });
 
         return $table;
     }
@@ -58,11 +62,9 @@ class UserController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param mixed $id
-     *
      * @return Show
      */
-    protected function detail()
+    protected function detail(): Show
     {
         $show = new Show($this->crud);
 
@@ -80,7 +82,7 @@ class UserController extends AdminController
      *
      * @return Form
      */
-    public function form()
+    public function form(): Form
     {
         $form = new Form($this->crud);
 

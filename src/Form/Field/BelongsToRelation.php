@@ -19,7 +19,7 @@ trait BelongsToRelation
      */
     public function __construct($column, $arguments = [])
     {
-        $this->setSelectable($arguments[0]);
+        //$this->setSelectable($arguments[0]);
 
         parent::__construct($column, array_slice($arguments, 1));
     }
@@ -63,9 +63,9 @@ trait BelongsToRelation
     protected function makeTable()
     {
         /** @var Selectable $selectable */
-        $selectable = new $this->selectable();
+        //$selectable = new $this->selectable();
 
-        return $selectable->renderFormTable($this->value());
+        //return $selectable->renderFormTable($this->value());
     }
 
     /**

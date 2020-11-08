@@ -3,7 +3,24 @@
 namespace Encore\Admin\Table\Tools;
 
 use Encore\Admin\Table;
+use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+
+class TestPager extends AbstractPaginator {
+
+	public function onFirstPage(){
+		return true;
+	}
+
+	public function hasMorePages(){
+		return true;
+	}
+
+	public function nextPageUrl(){
+		return '<URL>';
+	}
+
+}
 
 class Paginator extends AbstractTool
 {
@@ -27,7 +44,7 @@ class Paginator extends AbstractTool
         $this->table = $table;
         $this->perPageSelector = $perPageSelector;
 
-        //$this->initPaginator();
+        $this->initPaginator();
     }
 
     /**
@@ -37,11 +54,12 @@ class Paginator extends AbstractTool
      */
     protected function initPaginator()
     {
-        $this->paginator = $this->table->model()->eloquent();
+        //$this->paginator = $this->table->model()->eloquent();
+		$this->paginator = new TestPager;//new LengthAwarePaginator([],20,5);
 
-        if ($this->paginator instanceof LengthAwarePaginator) {
-            $this->paginator->appends(request()->all());
-        }
+        //if ($this->paginator instanceof LengthAwarePaginator) {
+        //    $this->paginator->appends(request()->all());
+        //}
     }
 
     /**
@@ -51,7 +69,11 @@ class Paginator extends AbstractTool
      */
     protected function paginationLinks()
     {
-        return $this->paginator->render('admin::table.pagination');
+    	return view('admin::table.pagination',[
+    		'elements'		=> ['OWO',2,5,6,7],
+    		'paginator'		=> $this->paginator,
+		]);
+        //return $this->paginator->render('admin::table.pagination');
     }
 
     /**
@@ -76,9 +98,9 @@ class Paginator extends AbstractTool
     protected function paginationRanger()
     {
         $parameters = [
-            'first' => $this->paginator->firstItem(),
-            'last'  => $this->paginator->lastItem(),
-            'total' => $this->paginator->total(),
+            'first' => '[FIRST]',//$this->paginator->firstItem(),
+            'last'  => '[LAST]',//$this->paginator->lastItem(),
+            'total' => '[TOTAL]',//$this->paginator->total(),
         ];
 
         $parameters = collect($parameters)->flatMap(function ($parameter, $key) {
