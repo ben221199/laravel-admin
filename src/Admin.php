@@ -86,12 +86,13 @@ class Admin
             return $this->menu;
         }
 
-        $menuClass = config('admin.database.menu_model');
+        //$menuClass = config('admin.database.menu_model');
 
-        /** @var Menu $menuModel */
-        $menuModel = new $menuClass();
+        ///** @var Menu $menuModel */
+        //$menuModel = new $menuClass();
 
-        return $this->menu = $menuModel->toTree();
+        //return $this->menu = $menuModel->toTree();
+		return [];
     }
 
     /**
